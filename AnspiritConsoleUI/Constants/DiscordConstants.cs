@@ -12,6 +12,7 @@ namespace AnspiritConsoleUI.Constants
         internal static readonly string AnzacSpiritSheetsRange = Path.Combine(ConfigFolderPath, "sheetsRange.txt");
         internal static readonly string AnzacSpiritWarOfficers = Path.Combine(ConfigFolderPath, "authorisedWarOfficers.txt");
         internal static readonly string AnzacSpiritPlayers = Path.Combine(ConfigFolderPath, "players.txt");
+        internal static readonly string DatabaseConnectionStringPath = Path.Combine(ConfigFolderPath, "database.txt");
         internal static readonly char DiscordCommandPrefix = '!';
         internal const int LogPaddingLength = 10;
     }

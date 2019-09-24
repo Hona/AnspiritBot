@@ -6,13 +6,15 @@ using AnspiritConsoleUI.Models;
 using System.Collections.Generic;
 using System;
 using Discord;
+using AnspiritConsoleUI.Services.Database;
 
 namespace AnspiritConsoleUI.Commands
 {
     [RequireWarOfficerPrecondition]
-    public class AnspiritModule : AnspiritModuleBase
+    public class AnspiritWarOfficerModule : AnspiritModuleBase
     {
         public AnzacSpiritService AnzacSpiritService { get; set; }
+        public AnspiritDatabaseService DbService { get; set; }
         [Command("sendorders")]
         public async Task SendOrders()
         {
@@ -31,11 +33,12 @@ namespace AnspiritConsoleUI.Commands
         public async Task SendOrder(string player)
         {
             var finalOrders = AnzacSpiritService.GetWarOrdersSortedByDiscordUser();
-            var playerDiscords = AnzacSpiritService.GetPlayerDiscordLinks();
-            var playerId = playerDiscords.First(x => x[1].Trim().ToLower() == player.Trim().ToLower())[0];
+            var playerDiscords = DbService.GetInGamePlayerDiscordLinks();
+            // TODO: Refactor this searching for id
+            var playerId = playerDiscords.First(x => x.InGameName.Trim().ToLower() == player.Trim().ToLower()).DiscordId;
             
-            var user = Context.Guild.Users.First(x => x.Id == ulong.Parse(playerId));
-            var embed = AnzacSpiritService.GetPlayerOrdersEmbed(finalOrders.First(x => x.Key == ulong.Parse(playerId)));
+            var user = Context.Guild.Users.First(x => x.Id == playerId);
+            var embed = AnzacSpiritService.GetPlayerOrdersEmbed(finalOrders.First(x => x.Key == playerId));
             await DiscordService.DirectMessageUserAsync(embed, user);
         }
 
@@ -43,10 +46,10 @@ namespace AnspiritConsoleUI.Commands
         public async Task GetOrder(string player)
         {
             var finalOrders = AnzacSpiritService.GetWarOrdersSortedByDiscordUser();
-            var playerDiscords = AnzacSpiritService.GetPlayerDiscordLinks();
-            var playerId = playerDiscords.First(x => x[1].Trim().ToLower() == player.Trim().ToLower())[0];
+            var playerDiscords = DbService.GetInGamePlayerDiscordLinks();
+            var playerId = playerDiscords.First(x => x.InGameName.Trim().ToLower() == player.Trim().ToLower()).DiscordId;
 
-            var embed = AnzacSpiritService.GetPlayerOrdersEmbed(finalOrders.First(x => x.Key == ulong.Parse(playerId)));
+            var embed = AnzacSpiritService.GetPlayerOrdersEmbed(finalOrders.First(x => x.Key == playerId));
             await ReplyAsync(embed: embed);
         }
 
@@ -59,7 +62,6 @@ namespace AnspiritConsoleUI.Commands
                 Timestamp = DateTime.Now,
                 Color = Color.Green
             };
-            var playerDiscords = AnzacSpiritService.GetPlayerDiscordLinks();
 
             var finalOrders = AnzacSpiritService.GetWarOrdersSortedByDiscordUser();
 
@@ -87,12 +89,6 @@ namespace AnspiritConsoleUI.Commands
             }
 
             await ReplyAsync(embed: outputEmbed.Build());
-        }
-
-        [Command("error")]
-        public async Task ThrowError()
-        {
-            throw new NotImplementedException();
         }
     }
 }

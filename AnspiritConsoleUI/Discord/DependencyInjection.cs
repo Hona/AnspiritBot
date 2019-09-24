@@ -1,4 +1,6 @@
-﻿using AnspiritConsoleUI.Services;
+﻿using AnspiritConsoleUI.Data;
+using AnspiritConsoleUI.Services;
+using AnspiritConsoleUI.Services.Database;
 using AnspiritConsoleUI.Services.Google;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -16,12 +18,19 @@ namespace AnspiritConsoleUI.Discord
             _commands = commands ?? new CommandService();
             _discordClient = discordClient ?? new DiscordSocketClient();
         }
-        public IServiceProvider BuildServiceProvider() => new ServiceCollection()
-            .AddSingleton(_discordClient)
-            .AddSingleton(_commands)
-            .AddSingleton<LogService>()
-            .AddSingleton<AnspiritSheetsService>()
-            .AddSingleton<AnzacSpiritService>()
-            .BuildServiceProvider();
+        public IServiceProvider BuildServiceProvider()
+        {
+            var logger = new LogService(_discordClient);
+            var dbContext = new AnspiritContext();
+            return new ServiceCollection()
+                .AddSingleton(_discordClient)
+                .AddSingleton(_commands)
+                .AddSingleton(logger)
+                .AddSingleton<AnspiritSheetsService>()
+                .AddSingleton<AnzacSpiritService>()
+                .AddSingleton(dbContext)
+                .AddSingleton(new AnspiritDatabaseService(logger))
+                .BuildServiceProvider();
+        }
     }
 }

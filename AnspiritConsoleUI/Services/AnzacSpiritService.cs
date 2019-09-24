@@ -1,5 +1,6 @@
 ﻿using AnspiritConsoleUI.Constants;
 using AnspiritConsoleUI.Models;
+using AnspiritConsoleUI.Services.Database;
 using AnspiritConsoleUI.Services.Google;
 using Discord;
 using System;
@@ -13,9 +14,11 @@ namespace AnspiritConsoleUI.Services
     public class AnzacSpiritService
     {
         private AnspiritSheetsService _anspiritSheetsService;
-        public AnzacSpiritService(AnspiritSheetsService anspiritSheetsService)
+        private AnspiritDatabaseService _dbService;
+        public AnzacSpiritService(AnspiritSheetsService anspiritSheetsService, AnspiritDatabaseService dbService)
         {
             _anspiritSheetsService = anspiritSheetsService;
+            _dbService = dbService;
         }
         public WarZones GetWarZones()
         {
@@ -70,20 +73,20 @@ namespace AnspiritConsoleUI.Services
 
             var output = new Dictionary<ulong, List<Tuple<string, Deployment>>>();
 
-            var playerDiscords = GetPlayerDiscordLinks();
+            var playerDiscords = _dbService.GetInGamePlayerDiscordLinks();
             foreach (var player in allPlayers)
             {
                 var deploymentOrders = orders.Where(x => x.Item2.Player == player).ToList();
-                var discordId = playerDiscords.First(x => x[1] == player)[0];
-                if (output.ContainsKey(ulong.Parse(discordId)))
+                var discordId = playerDiscords.First(x => x.InGameName.ToLower() == player.ToLower()).DiscordId;
+                if (output.ContainsKey(discordId))
                 {
                     // Already added, so its an alt account
                     deploymentOrders = deploymentOrders.Select(x => new Tuple<string, Deployment>(x.Item1, new Deployment { Player = x.Item2.Player, Team = x.Item2.Team + $" ({player})" })).ToList();
-                    output[ulong.Parse(discordId)].AddRange(deploymentOrders);
+                    output[discordId].AddRange(deploymentOrders);
                 }
                 else
                 {
-                    output.Add(ulong.Parse(discordId), deploymentOrders);
+                    output.Add(discordId, deploymentOrders);
 
                 }
             }
@@ -105,6 +108,5 @@ namespace AnspiritConsoleUI.Services
             }
             return embedBuilder.Build();
         }
-        public List<string[]> GetPlayerDiscordLinks() => File.ReadAllLines(DiscordConstants.AnzacSpiritPlayers).Select(x=> x.Split(' ', 2)).ToList();
     }
 }
