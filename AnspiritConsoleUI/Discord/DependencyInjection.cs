@@ -22,6 +22,7 @@ namespace AnspiritConsoleUI.Discord
         {
             var logger = new LogService(_discordClient);
             var dbContext = new AnspiritContext();
+            var dbService = new AnspiritDatabaseService(logger);
             return new ServiceCollection()
                 .AddSingleton(_discordClient)
                 .AddSingleton(_commands)
@@ -29,7 +30,7 @@ namespace AnspiritConsoleUI.Discord
                 .AddSingleton<AnspiritSheetsService>()
                 .AddSingleton<AnzacSpiritService>()
                 .AddSingleton(dbContext)
-                .AddSingleton(new AnspiritDatabaseService(logger))
+                .AddSingleton(dbService)
                 .BuildServiceProvider();
         }
     }

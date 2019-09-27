@@ -9,16 +9,30 @@ namespace AnspiritConsoleUI.Services
 {
     public static class HelpCommandService
     {
-        public static Embed GetModuleHelpEmbed(ModuleInfo module, ICommandContext context)
+        public static Embed GetModuleHelpEmbed(ModuleInfo module, ICommandContext context, IServiceProvider services)
         {
-            var title = $"Help: **({module.Name})**";
-            var text = module.Commands.Where(x => x.CheckPreconditionsAsync(context).GetAwaiter().GetResult().IsSuccess).Aggregate("",
-                (current, command) =>
-                    current +
-                    $"**__{'!' + command.Name}__**{Environment.NewLine}**{command.Summary}**. Parameters: {command.Parameters.Aggregate("", (currentString, nextParameter) => currentString + $"{nextParameter.Name} {GetSummaryString(nextParameter.Summary)}, ").TrimEnd(' ', ',')}{Environment.NewLine}");
-            return new EmbedBuilder().WithTitle(title).WithDescription(text).Build();
+            var title = $"Help: **({module.Name})**" ;
+            var validForCurrentUserCommands = module.Commands.Where(x => x.CheckPreconditionsAsync(context, services).GetAwaiter().GetResult().IsSuccess);
+
+            var embedBuilder = new EmbedBuilder().WithTitle(title);
+            foreach(var command in validForCurrentUserCommands)
+            {
+                embedBuilder.AddField($"**{'!' + command.Name}** " + GetParametersString(command).TrimEnd(' ', ','), $"{(command.Summary == string.Empty ? "No description" : command.Summary)}. " );
+            }
+
+            //var desc = modules.Aggregate("",
+            //    (current, command) =>
+            //        current +
+            //        $"**{'!' + command.Name}**{Environment.NewLine}" +
+            //        $"{command.Summary}. " + GetParametersString(command)).TrimEnd(' ', ',') + Environment.NewLine;
+            return embedBuilder.Build();
         }
 
         private static string GetSummaryString(string summary) => string.IsNullOrEmpty(summary) ? "" : $"({summary})";
+        private static string GetParametersString(CommandInfo command)
+        {
+            var output = $"{command.Parameters.Aggregate("", (currentString, nextParameter) => currentString + $"[{nextParameter.Name}{(GetSummaryString(nextParameter.Summary) == string.Empty ? "" : GetSummaryString(nextParameter.Summary))}] ")}";
+            return output.Trim() == "Parameters:" ? "" : output;
+        }
     }
 }

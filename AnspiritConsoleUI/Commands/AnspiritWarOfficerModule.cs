@@ -16,6 +16,8 @@ namespace AnspiritConsoleUI.Commands
         public AnzacSpiritService AnzacSpiritService { get; set; }
         public AnspiritDatabaseService DbService { get; set; }
         public CommandService CommandService { get; set; }
+        public IServiceProvider Services { get; set; }
+
         [Command("sendorders")]
         [Summary("DM's each user in the guild their orders (only if they have deployments), it is recommended to run !verifyorders first.")]
         public async Task SendOrders()
@@ -101,7 +103,7 @@ namespace AnspiritConsoleUI.Commands
         {
             foreach(var module in CommandService.Modules.Where(x => !x.Name.Contains("ModuleBase")))
             {
-                await ReplyAsync(embed: HelpCommandService.GetModuleHelpEmbed(module, Context));
+                await ReplyAsync(embed: HelpCommandService.GetModuleHelpEmbed(module, Context, Services));
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AnspiritConsoleUI.Services;
+using AnspiritConsoleUI.Services.Database;
 using AnspiritConsoleUI.Services.Google;
 using Discord;
 using Discord.WebSocket;
@@ -30,7 +31,7 @@ namespace AnspiritConsoleUI.Discord
             _dependencyInjection = new DependencyInjection(commands, _discordClient);
             _services = _dependencyInjection.BuildServiceProvider();
             _anspiritCommandService = new AnspiritCommandService(_discordClient, commands, _services);
-
+            
             _logger = _services.GetService(typeof(LogService)) as LogService;
         }
 
@@ -46,6 +47,7 @@ namespace AnspiritConsoleUI.Discord
                 await _discordClient.StartAsync();
 
                 AnspiritSheetsService asdf = new AnspiritSheetsService(_logger);
+
                 // Block the task indefinately
                 await Task.Delay(-1);
             }
