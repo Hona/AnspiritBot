@@ -103,7 +103,12 @@ namespace AnspiritConsoleUI.Commands
         {
             foreach(var module in CommandService.Modules.Where(x => !x.Name.Contains("ModuleBase")))
             {
-                await ReplyAsync(embed: HelpCommandService.GetModuleHelpEmbed(module, Context, Services));
+                var moduleHelpEmbed = HelpCommandService.GetModuleHelpEmbed(module, Context, Services);
+                if (moduleHelpEmbed.Fields.Length > 0)
+                {
+                    await ReplyAsync(embed: moduleHelpEmbed);
+
+                }
             }
         }
     }
