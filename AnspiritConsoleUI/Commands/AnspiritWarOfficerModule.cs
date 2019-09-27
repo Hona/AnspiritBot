@@ -17,6 +17,7 @@ namespace AnspiritConsoleUI.Commands
         public AnspiritDatabaseService DbService { get; set; }
         public CommandService CommandService { get; set; }
         [Command("sendorders")]
+        [Summary("DM's each user in the guild their orders (only if they have deployments), it is recommended to run !verifyorders first.")]
         public async Task SendOrders()
         {
             var finalOrders = AnzacSpiritService.GetWarOrdersSortedByDiscordUser();
@@ -31,6 +32,7 @@ namespace AnspiritConsoleUI.Commands
         }
 
         [Command("sendorder")]
+        [Summary("Did a player not get their order/you want to remind them/updated their orders? Run this command to only send one user their orders.")]
         public async Task SendOrder(string player)
         {
             var finalOrders = AnzacSpiritService.GetWarOrdersSortedByDiscordUser();
@@ -44,6 +46,7 @@ namespace AnspiritConsoleUI.Commands
         }
 
         [Command("getorder")]
+        [Summary("Returns a players orders in the current channel (will not send it to them, useful for seeing a particular players orders)")]
         public async Task GetOrder(string player)
         {
             var finalOrders = AnzacSpiritService.GetWarOrdersSortedByDiscordUser();
@@ -55,6 +58,7 @@ namespace AnspiritConsoleUI.Commands
         }
 
         [Command("verifyorders")]
+        [Summary("Checks that there are no duplicate deployments for a players team (each team can only be deployed once). More features will come.")]
         public async Task VerifyOrders()
         {
             var outputEmbed = new EmbedBuilder
@@ -92,6 +96,7 @@ namespace AnspiritConsoleUI.Commands
             await ReplyAsync(embed: outputEmbed.Build());
         }
         [Command("help")]
+        [Summary("The command you are running")]
         public async Task HelpAsync()
         {
             foreach(var module in CommandService.Modules.Where(x => !x.Name.Contains("ModuleBase")))

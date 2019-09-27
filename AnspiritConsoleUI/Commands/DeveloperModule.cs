@@ -19,6 +19,7 @@ namespace AnspiritConsoleUI.Commands
         public AnspiritDatabaseService DbService { get; set; }
         public AnzacSpiritService AnzacSpiritService { get; set; }
         [Command("portplayers")]
+        [Summary("Ports the text file to the MySQL database")]
         [Obsolete]
         public async Task PortPlayers()
         {

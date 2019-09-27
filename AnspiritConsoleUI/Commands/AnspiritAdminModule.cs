@@ -14,6 +14,7 @@ namespace AnspiritConsoleUI.Commands
         public AnspiritDatabaseService DbService { get; set; }
 
         [Command("warofficer add")]
+        [Summary("Adds a discord user the the war officers, they can now run all the order related commands.")]
         public async Task AddWarOfficer(IUser user)
         {
             await DbService.AddWarOfficerAsync(user.Id);
@@ -21,6 +22,7 @@ namespace AnspiritConsoleUI.Commands
         }
         [Command("warofficer remove")]
         [Alias("warofficer delete", "warofficer del", "warofficer rem")]
+        [Summary("Removes a user from the war officer list.")]
         public async Task RemoveWarOfficer(IUser user)
         {
             await DbService.RemoveWarOfficerAsync(user.Id);
@@ -28,6 +30,7 @@ namespace AnspiritConsoleUI.Commands
         }
         [Command("warofficer list")]
         [Alias("warofficer ls", "warofficer get")]
+        [Summary("Returns a list of the current war officers, if the user has left the guild, it will show the users ID for easy removal.")]
         public async Task ListWarOfficer()
         {
             var officers = DbService.GetWarOfficers();
@@ -62,6 +65,7 @@ namespace AnspiritConsoleUI.Commands
         }
 
         [Command("playerlink add")]
+        [Summary("Adds a link between a users discord and in-game name, this is required for the !sendorders command. This should be done when a player joins the guild.")]
         public async Task AddPlayerlink(IUser user, string playername)
         {
             await DbService.AddIngamePlayerDiscordLinkAsync(user.Id, playername);
@@ -69,6 +73,7 @@ namespace AnspiritConsoleUI.Commands
         }
         [Command("playerlink remove")]
         [Alias("playerlink delete", "playerlink del", "playerlink rem")]
+        [Summary("Removes the link between a users discord and in-game name, this should be done when a player leaves the guild.")]
         public async Task RemovePlayerlink(string playername)
         {
             await DbService.RemoveIngamePlayerDiscordLinkAsync(playername);
@@ -76,6 +81,7 @@ namespace AnspiritConsoleUI.Commands
         }
         [Command("playerlink list")]
         [Alias("playerlink ls", "playerlink get")]
+        [Summary("Returns a list of the current links of ingame names with discord.")]
         public async Task ListPlayerlink()
         {
             var userLinks = DbService.GetInGamePlayerDiscordLinks().OrderBy(x => x.InGameName);

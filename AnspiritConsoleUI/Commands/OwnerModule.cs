@@ -14,6 +14,7 @@ namespace AnspiritConsoleUI.Commands
     {
         public AnspiritDatabaseService DbService { get; set; }
         [Command("spiritadmin add")]
+        [Summary("Adds a discord user to the spirit admin list.")]
         public async Task AddSpiritAdmin(IUser user)
         {
             await DbService.AddAnspiritAdminAsync(user.Id);
@@ -21,6 +22,7 @@ namespace AnspiritConsoleUI.Commands
         }
         [Command("spiritadmin remove")]
         [Alias("spiritadmin delete", "spiritadmin del", "spiritadmin rem")]
+        [Summary("Removes a player from the spirit admin list.")]
         public async Task RemoveSpiritAdmin(IUser user)
         {
             await DbService.RemoveAnspiritAdminAsync(user.Id);
@@ -28,6 +30,7 @@ namespace AnspiritConsoleUI.Commands
         }
         [Command("spiritadmin list")]
         [Alias("spiritadmin ls", "spiritadmin get")]
+        [Summary("Returns a list of the current spirit admins.")]
         public async Task ListSpiritAdmin()
         {
             var admins = DbService.GetAnspiritAdmins();
