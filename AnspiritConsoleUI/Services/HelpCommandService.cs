@@ -14,7 +14,7 @@ namespace AnspiritConsoleUI.Services
             var title = $"Help: **({module.Name})**" ;
             var validForCurrentUserCommands = module.Commands.Where(x => x.CheckPreconditionsAsync(context, services).GetAwaiter().GetResult().IsSuccess);
 
-            var embedBuilder = new EmbedBuilder().WithTitle(title);
+            var embedBuilder = new EmbedBuilder().WithTitle(title).WithColor(Color.Purple);
             foreach(var command in validForCurrentUserCommands)
             {
                 embedBuilder.AddField($"**{'!' + command.Name}** " + GetParametersString(command).TrimEnd(' ', ','), $"{(command.Summary == string.Empty ? "No description" : command.Summary)}. " );

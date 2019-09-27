@@ -101,6 +101,7 @@ namespace AnspiritConsoleUI.Commands
         [Summary("The command you are running")]
         public async Task HelpAsync()
         {
+            var message = await ReplyNewEmbed("Building the help command... This message will be deleted when all help messages are sent", Color.Purple);
             foreach(var module in CommandService.Modules.Where(x => !x.Name.Contains("ModuleBase")))
             {
                 var moduleHelpEmbed = HelpCommandService.GetModuleHelpEmbed(module, Context, Services);
@@ -110,6 +111,7 @@ namespace AnspiritConsoleUI.Commands
 
                 }
             }
+            await message.DeleteAsync();
         }
     }
 }
