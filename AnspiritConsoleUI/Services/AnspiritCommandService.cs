@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -12,23 +13,28 @@ namespace AnspiritConsoleUI.Services
         private readonly DiscordSocketClient _discordClient;
         private readonly CommandService _commands;
         private readonly IServiceProvider _serviceProvider;
+        private readonly LogService _logger;
 
         public AnspiritCommandService(DiscordSocketClient discordClient, CommandService commands, IServiceProvider serviceProvider)
         {
             _discordClient = discordClient;
             _serviceProvider = serviceProvider;
             _commands = commands;
+            _logger = (LogService)_serviceProvider.GetService(typeof(LogService));
         }
         internal async Task InitializeAsync()
         {
             // Main handler for command input
             _discordClient.MessageReceived += HandleCommandAsync;
+            await _logger.LogInfoAsync("CommandService", "Registered MessageReceived event");
 
             // Post execution handler
             _commands.CommandExecuted += OnCommandExecutedAsync;
+            await _logger.LogInfoAsync("CommandService", "Registered CommandExecuted event");
 
             // Install discord commands
             await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(), services: _serviceProvider);
+            await _logger.LogInfoAsync("CommandService", $"Added {_commands.Modules.Count()} modules using reflection, with a total of {_commands.Commands.Count()} commands");
         }
 
         internal async Task HandleCommandAsync(SocketMessage inputMessage)
@@ -48,6 +54,9 @@ namespace AnspiritConsoleUI.Services
                 // Create a WebSocket-based command context based on the message
                 var context = new SocketCommandContext(_discordClient, message);
 
+                // Low volume of commands, so it is safe to log it without getting flooded
+                await _logger.LogInfoAsync("HandleCommand", $"User: {context.User.Username + "#" + context.User.Discriminator} ran: {Environment.NewLine}{context.Message.Content.Substring(argPos)}");
+
                 // Execute the command with the command context we just
                 // created, along with the service provider for precondition checks.
                 await _commands.ExecuteAsync(
@@ -65,12 +74,12 @@ namespace AnspiritConsoleUI.Services
                     Timestamp = DateTime.Now,
                     Color = Color.Red
                 };
-                await context.Channel.SendMessageAsync(embed:embedBuilder.WithDescription(result.ErrorReason).Build());
-                var commandName = command.IsSpecified ? command.Value.Name : "A command";
-                var logger = (LogService)_serviceProvider.GetService(typeof(LogService));
-                await logger.LogAsync(new LogMessage(LogSeverity.Info,
-                    "CommandExecution",
-                    $"{commandName} was executed at {DateTime.UtcNow}."));
+                await context.Channel.SendMessageAsync(embed: embedBuilder.WithDescription(result.ErrorReason).Build());
+                var commandName = command.IsSpecified ? command.Value.Name : "An unknown command";
+                
+                await _logger.LogAsync(new LogMessage(LogSeverity.Error,
+                    "CommandService",
+                    $"{commandName} threw an error at {DateTime.UtcNow}: {Environment.NewLine}{result.ErrorReason}"));
             }
         }
         internal static CommandService BuildCommandService()
@@ -79,10 +88,11 @@ namespace AnspiritConsoleUI.Services
             var commandServiceConfig = new CommandServiceConfig
             {
                 CaseSensitiveCommands = false,
-                DefaultRunMode = RunMode.Sync,
+                DefaultRunMode = RunMode.Async,
                 IgnoreExtraArgs = true,
                 LogLevel = LogSeverity.Info
             };
+
             return new CommandService(commandServiceConfig);
         }
     }
