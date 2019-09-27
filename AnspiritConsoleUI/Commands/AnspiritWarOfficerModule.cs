@@ -15,6 +15,7 @@ namespace AnspiritConsoleUI.Commands
     {
         public AnzacSpiritService AnzacSpiritService { get; set; }
         public AnspiritDatabaseService DbService { get; set; }
+        public CommandService CommandService { get; set; }
         [Command("sendorders")]
         public async Task SendOrders()
         {
@@ -89,6 +90,14 @@ namespace AnspiritConsoleUI.Commands
             }
 
             await ReplyAsync(embed: outputEmbed.Build());
+        }
+        [Command("help")]
+        public async Task HelpAsync()
+        {
+            foreach(var module in CommandService.Modules.Where(x => !x.Name.Contains("ModuleBase")))
+            {
+                await ReplyAsync(embed: HelpCommandService.GetModuleHelpEmbed(module, Context));
+            }
         }
     }
 }
