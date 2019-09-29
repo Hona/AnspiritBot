@@ -17,5 +17,6 @@ namespace AnspiritConsoleUI.Constants
         internal static readonly string ZoneOverviewFilePath = Path.Combine(ResourceFolderPath, "ZoneOverview.png");
         internal static readonly char DiscordCommandPrefix = '!';
         internal const int LogPaddingLength = 10;
+        internal const ulong VaetheDiscordID = 316378932100333568;
     }
 }
