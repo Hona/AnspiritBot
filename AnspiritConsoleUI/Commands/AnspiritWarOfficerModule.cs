@@ -31,6 +31,8 @@ namespace AnspiritConsoleUI.Commands
                 var embed = AnzacSpiritService.GetPlayerOrdersEmbed(playerOrder);
                 await DiscordService.DirectMessageUserAsync(embed, user);
             });
+
+            await ReplyNewEmbed("Success", Color.Purple);
         }
 
         [Command("sendorder")]

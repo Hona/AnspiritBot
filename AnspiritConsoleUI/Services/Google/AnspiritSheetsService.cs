@@ -35,11 +35,11 @@ namespace AnspiritConsoleUI.Services.Google
         {
             if (!File.Exists(DiscordConstants.AnzacSpiritSheetsID))
             {
-                throw new FileNotFoundException("Could not find the AnspiritSheetsID file", (DiscordConstants.AnzacSpiritSheetsID);
+                throw new FileNotFoundException("Could not find the AnspiritSheetsID file", DiscordConstants.AnzacSpiritSheetsID);
             }
             if (!File.Exists(DiscordConstants.AnzacSpiritSheetsRange))
             {
-                throw new FileNotFoundException("Could not find the AnspiritSheetsRange file", (DiscordConstants.AnzacSpiritSheetsRange);
+                throw new FileNotFoundException("Could not find the AnspiritSheetsRange file", DiscordConstants.AnzacSpiritSheetsRange);
             }
 
             var spreadsheetId = File.ReadAllText(DiscordConstants.AnzacSpiritSheetsID);
