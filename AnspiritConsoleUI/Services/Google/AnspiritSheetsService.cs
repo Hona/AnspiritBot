@@ -33,9 +33,13 @@ namespace AnspiritConsoleUI.Services.Google
         }
         internal IList<IList<object>> GetWarPlacementValues()
         {
-            if (!(File.Exists(DiscordConstants.AnzacSpiritSheetsID) && File.Exists(DiscordConstants.AnzacSpiritSheetsRange)))
+            if (!File.Exists(DiscordConstants.AnzacSpiritSheetsID))
             {
-                return null;
+                throw new FileNotFoundException("Could not find the AnspiritSheetsID file", (DiscordConstants.AnzacSpiritSheetsID);
+            }
+            if (!File.Exists(DiscordConstants.AnzacSpiritSheetsRange))
+            {
+                throw new FileNotFoundException("Could not find the AnspiritSheetsRange file", (DiscordConstants.AnzacSpiritSheetsRange);
             }
 
             var spreadsheetId = File.ReadAllText(DiscordConstants.AnzacSpiritSheetsID);

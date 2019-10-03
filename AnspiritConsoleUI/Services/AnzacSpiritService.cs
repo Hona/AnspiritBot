@@ -30,10 +30,22 @@ namespace AnspiritConsoleUI.Services
             {
                 for (int row = 1; row < data[column].Count; row++)
                 {
+                    var player = (string)data[column][row];
+                    var team = (string)data[column + 1][row];
+
+                    if (string.IsNullOrWhiteSpace(player))
+                    {
+                        throw new Exception($"Player name is null or whitespace, at column {0}, row {row}");
+                    }
+                    if (string.IsNullOrWhiteSpace(team))
+                    {
+                        throw new Exception($"Team name is null or whitespace, at column {0 + 1}, row {row}");
+                    }
+
                     warZones[column].Add(new Deployment
                     {
-                        Player = (string)data[column][row],
-                        Team = (string)data[column + 1][row]
+                        Player = player,
+                        Team = team
                     });
                 }
             }
@@ -76,8 +88,15 @@ namespace AnspiritConsoleUI.Services
             var playerDiscords = _dbService.GetInGamePlayerDiscordLinks();
             foreach (var player in allPlayers)
             {
+                // Should always be >= 1
                 var deploymentOrders = orders.Where(x => x.Item2.Player == player).ToList();
-                var discordId = playerDiscords.First(x => x.InGameName.ToLower() == player.ToLower()).DiscordId;
+                var playerLink = playerDiscords.FirstOrDefault(x => x.InGameName.ToLower() == player.ToLower());
+                if (playerLink == null)
+                {
+                    throw new Exception("Could not find a player link for ingame name of " + player);
+                }
+                var discordId = playerLink.DiscordId;
+
                 if (output.ContainsKey(discordId))
                 {
                     // Already added, so its an alt account
@@ -87,7 +106,6 @@ namespace AnspiritConsoleUI.Services
                 else
                 {
                     output.Add(discordId, deploymentOrders);
-
                 }
             }
             return output;
