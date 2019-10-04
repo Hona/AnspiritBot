@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AnspiritConsoleUI.Services
 {
-    public static class DiscordMessageService
+    public static class DiscordMessageUtilities
     {
         private static int CodeBlockPrefixOrSuffixLength => CodeBlockPrefix.Length;
         private static string CodeBlockPrefix => $"```{Environment.NewLine}";

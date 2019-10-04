@@ -9,7 +9,6 @@ namespace AnspiritConsoleUI.Services.Google
 {
     public class AnspiritSheetsService
     {
-        private string[] _scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         private string _applicationName = "Anzac Spirit War Placements";
         private SheetsService _service;
         public AnspiritSheetsService(LogService logger)

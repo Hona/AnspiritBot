@@ -1,11 +1,8 @@
 ﻿using Discord;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AnspiritConsoleUI.Services
 {
-    public static class EmbedService
+    public static class EmbedUtilities
     {
         public static Embed CreateEmbed(string text, Color color)
             => new EmbedBuilder

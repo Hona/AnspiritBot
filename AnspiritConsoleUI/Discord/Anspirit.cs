@@ -1,5 +1,4 @@
 ﻿using AnspiritConsoleUI.Services;
-using AnspiritConsoleUI.Services.Database;
 using AnspiritConsoleUI.Services.Google;
 using Discord;
 using Discord.WebSocket;

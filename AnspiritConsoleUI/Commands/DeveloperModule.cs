@@ -2,12 +2,10 @@
 using AnspiritConsoleUI.Models.Database;
 using AnspiritConsoleUI.Services;
 using AnspiritConsoleUI.Services.Database;
-using Discord;
 using Discord.Commands;
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AnspiritConsoleUI.Commands

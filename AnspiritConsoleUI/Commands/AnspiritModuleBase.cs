@@ -10,7 +10,7 @@ namespace AnspiritConsoleUI.Commands
         public LogService Logger { get; set; }
         protected async Task<IUserMessage> ReplyNewEmbed(string text, Color color)
         {
-            var embed = EmbedService.CreateEmbed(text, color);
+            var embed = EmbedUtilities.CreateEmbed(text, color);
             return await ReplyAsync(embed: embed);
         }
     }

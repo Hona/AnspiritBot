@@ -1,9 +1,9 @@
 ﻿using Discord;
 using System.Threading.Tasks;
 
-namespace AnspiritConsoleUI.Services
+namespace AnspiritConsoleUI.Utilities
 {
-    public static class DiscordService
+    public static class DiscordUtilities
     {
         public static async Task DirectMessageUserAsync(Embed embed, IUser user)
         {

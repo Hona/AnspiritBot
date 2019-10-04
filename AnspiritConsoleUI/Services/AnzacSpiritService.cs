@@ -1,11 +1,9 @@
-﻿using AnspiritConsoleUI.Constants;
-using AnspiritConsoleUI.Models;
+﻿using AnspiritConsoleUI.Models;
 using AnspiritConsoleUI.Services.Database;
 using AnspiritConsoleUI.Services.Google;
 using Discord;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -120,10 +118,12 @@ namespace AnspiritConsoleUI.Services
             };
 
             var zones = playerOrder.Value.Select(x => x.Item1).Distinct();
+
             foreach (var zone in zones)
             {
                 embedBuilder.AddField(zone, string.Join(", ", playerOrder.Value.Where(x => x.Item1 == zone).Select(x => x.Item2.Team)));
             }
+
             return embedBuilder.Build();
         }
     }

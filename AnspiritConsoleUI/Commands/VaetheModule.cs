@@ -1,11 +1,9 @@
-﻿using AnspiritConsoleUI.Services;
+﻿using AnspiritConsoleUI.Commands.Preconditions;
+using AnspiritConsoleUI.Services;
 using Discord;
 using Discord.Commands;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AnspiritConsoleUI.Commands
@@ -15,6 +13,7 @@ namespace AnspiritConsoleUI.Commands
     public class VaetheModule : AnspiritModuleBase
     {
         [Command("pm2")]
+        [Summary("What")]
         public async Task PM2Commands([Remainder]string arguments)
         {
             var cmd = "pm2 " + arguments;
@@ -45,7 +44,7 @@ namespace AnspiritConsoleUI.Commands
 
             if (!string.IsNullOrWhiteSpace(lines))
             {
-                var outputMessages = DiscordMessageService.GetSendableCodeblockMessages(lines);
+                var outputMessages = DiscordMessageUtilities.GetSendableCodeblockMessages(lines);
                 foreach (var message in outputMessages)
                 {
                     await ReplyAsync(message);
@@ -55,6 +54,8 @@ namespace AnspiritConsoleUI.Commands
             {
                 await ReplyNewEmbed("No output, presume program ran successfully", Color.Purple);
             }
+
+            process.Dispose();
         }
     }
 }
