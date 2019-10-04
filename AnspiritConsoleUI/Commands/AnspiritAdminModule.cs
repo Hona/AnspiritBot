@@ -16,18 +16,18 @@ namespace AnspiritConsoleUI.Commands
 
         [Command("warofficer add")]
         [Summary("Adds a discord user the the war officers, they can now run all the order related commands")]
-        public async Task AddWarOfficer(IUser user)
+        public async Task AddWarOfficer(IUser discordUser)
         {
-            await DbService.AddWarOfficerAsync(user.Id);
-            await ReplyNewEmbed($"Added {user.Username} to the war officers", Color.Green);   
+            await DbService.AddWarOfficerAsync(discordUser.Id);
+            await ReplyNewEmbed($"Added {discordUser.Username} to the war officers", Color.Green);   
         }
         [Command("warofficer remove")]
         [Alias("warofficer delete", "warofficer del", "warofficer rem")]
         [Summary("Removes a user from the war officer list")]
-        public async Task RemoveWarOfficer(IUser user)
+        public async Task RemoveWarOfficer(IUser discordUser)
         {
-            await DbService.RemoveWarOfficerAsync(user.Id);
-            await ReplyNewEmbed($"Removed {user.Username} from the war officers", Color.Green);
+            await DbService.RemoveWarOfficerAsync(discordUser.Id);
+            await ReplyNewEmbed($"Removed {discordUser.Username} from the war officers", Color.Green);
         }
         [Command("warofficer list")]
         [Alias("warofficer ls", "warofficer get")]
@@ -67,18 +67,18 @@ namespace AnspiritConsoleUI.Commands
 
         [Command("playerlink add")]
         [Summary("Adds a link between a users discord and in-game name, this is required for the !sendorders command. This should be done when a player joins the guild")]
-        public async Task AddPlayerlink(IUser user, string playername)
+        public async Task AddPlayerlink(IUser discordUser, string playerInGameName)
         {
-            await DbService.AddIngamePlayerDiscordLinkAsync(user.Id, playername);
-            await ReplyNewEmbed($"Added the in game player '{playername}' to discord user {user.Username}", Color.Green);
+            await DbService.AddIngamePlayerDiscordLinkAsync(discordUser.Id, playerInGameName);
+            await ReplyNewEmbed($"Added the in game player '{playerInGameName}' to discord user {discordUser.Username}", Color.Green);
         }
         [Command("playerlink remove")]
         [Alias("playerlink delete", "playerlink del", "playerlink rem")]
         [Summary("Removes the link between a users discord and in-game name, this should be done when a player leaves the guild")]
-        public async Task RemovePlayerlink(string playername)
+        public async Task RemovePlayerlink(string playerInGameName)
         {
-            await DbService.RemoveIngamePlayerDiscordLinkAsync(playername);
-            await ReplyNewEmbed($"Removed in game player {playername} from linked users", Color.Green);
+            await DbService.RemoveIngamePlayerDiscordLinkAsync(playerInGameName);
+            await ReplyNewEmbed($"Removed in game player {playerInGameName} from linked users", Color.Green);
         }
         [Command("playerlink list")]
         [Alias("playerlink ls", "playerlink get")]

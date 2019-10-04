@@ -39,12 +39,12 @@ namespace AnspiritConsoleUI.Commands
 
         [Command("sendorder")]
         [Summary("Did a player not get their order/you want to remind them/updated their orders? Run this command to only send one user their orders")]
-        public async Task SendOrder(string player)
+        public async Task SendOrder(string playerInGameName)
         {
             var finalOrders = AnzacSpiritService.GetWarOrdersSortedByDiscordUser();
             var playerDiscords = DbService.GetInGamePlayerDiscordLinks();
             // TODO: Refactor this searching for id
-            var playerId = playerDiscords.First(x => x.InGameName.Trim().ToLower() == player.Trim().ToLower()).DiscordId;
+            var playerId = playerDiscords.First(x => x.InGameName.Trim().ToLower() == playerInGameName.Trim().ToLower()).DiscordId;
             
             var user = Context.Guild.Users.First(x => x.Id == playerId);
             var embed = AnzacSpiritService.GetPlayerOrdersEmbed(finalOrders.First(x => x.Key == playerId));
@@ -53,11 +53,11 @@ namespace AnspiritConsoleUI.Commands
 
         [Command("getorder")]
         [Summary("Returns a players orders in the current channel (will not send it to them, useful for seeing a particular players orders)")]
-        public async Task GetOrder(string player)
+        public async Task GetOrder(string playerInGameName)
         {
             var finalOrders = AnzacSpiritService.GetWarOrdersSortedByDiscordUser();
             var playerDiscords = DbService.GetInGamePlayerDiscordLinks();
-            var playerId = playerDiscords.First(x => x.InGameName.Trim().ToLower() == player.Trim().ToLower()).DiscordId;
+            var playerId = playerDiscords.First(x => x.InGameName.Trim().ToLower() == playerInGameName.Trim().ToLower()).DiscordId;
 
             var embed = AnzacSpiritService.GetPlayerOrdersEmbed(finalOrders.First(x => x.Key == playerId));
             await ReplyAsync(embed: embed);

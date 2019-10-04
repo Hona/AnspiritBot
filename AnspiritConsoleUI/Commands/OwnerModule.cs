@@ -14,18 +14,18 @@ namespace AnspiritConsoleUI.Commands
         public AnspiritDatabaseService DbService { get; set; }
         [Command("spiritadmin add")]
         [Summary("Adds a discord user to the spirit admin list")]
-        public async Task AddSpiritAdmin(IUser user)
+        public async Task AddSpiritAdmin(IUser discordUser)
         {
-            await DbService.AddAnspiritAdminAsync(user.Id);
-            await ReplyNewEmbed($"Added {user.Username} to the Anzac Spirit admins", Color.Green);
+            await DbService.AddAnspiritAdminAsync(discordUser.Id);
+            await ReplyNewEmbed($"Added {discordUser.Username} to the Anzac Spirit admins", Color.Green);
         }
         [Command("spiritadmin remove")]
         [Alias("spiritadmin delete", "spiritadmin del", "spiritadmin rem")]
         [Summary("Removes a player from the spirit admin list")]
-        public async Task RemoveSpiritAdmin(IUser user)
+        public async Task RemoveSpiritAdmin(IUser discordUser)
         {
-            await DbService.RemoveAnspiritAdminAsync(user.Id);
-            await ReplyNewEmbed($"Removed {user.Username} from the Anzac Spirit admins", Color.Green);
+            await DbService.RemoveAnspiritAdminAsync(discordUser.Id);
+            await ReplyNewEmbed($"Removed {discordUser.Username} from the Anzac Spirit admins", Color.Green);
         }
         [Command("spiritadmin list")]
         [Alias("spiritadmin ls", "spiritadmin get")]
