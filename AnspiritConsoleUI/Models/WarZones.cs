@@ -9,6 +9,7 @@ namespace AnspiritConsoleUI.Models
         {
             get
                 {
+                // Switches on the column number as per the excel sheet
                 switch (index)
                 {
                     case 0:

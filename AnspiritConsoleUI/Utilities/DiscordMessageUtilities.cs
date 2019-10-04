@@ -9,11 +9,18 @@ namespace AnspiritConsoleUI.Services
         private static int CodeBlockPrefixOrSuffixLength => CodeBlockPrefix.Length;
         private static string CodeBlockPrefix => $"```{Environment.NewLine}";
         private static string CodeBlockSuffix => $"{Environment.NewLine}```";
-        public static string[] GetSendableCodeblockMessages(string input)
+        public static string[] GetSendableMessages(string input, bool codeBlock = false)
         {
             if (input.Length < 2000)
             {
-                return new string[] {CodeBlockPrefix + input + CodeBlockSuffix};
+                if (codeBlock == true)
+                {
+                    return new string[] { CodeBlockPrefix + input + CodeBlockSuffix };
+                }
+                else
+                {
+                    return new string[] { input };
+                }
             }
             else
             {
@@ -21,7 +28,8 @@ namespace AnspiritConsoleUI.Services
                 do
                 {
                     var newLineIndex = -1;
-                    for (int i = 1999 - 2 * CodeBlockPrefixOrSuffixLength; i > 0; i--)
+                    var indexStartSubtractor = codeBlock ? 2 * CodeBlockPrefixOrSuffixLength : 0;
+                    for (int i = 1999 - indexStartSubtractor; i > 0; i--)
                     {
                         var searchedString = input.Substring(i, Environment.NewLine.Length);
                         if (searchedString == Environment.NewLine)
@@ -34,13 +42,26 @@ namespace AnspiritConsoleUI.Services
                     if (newLineIndex == -1)
                     {
                         // No newlines, just split it at the end
-                        newLineIndex = 1999 - 2 * CodeBlockPrefixOrSuffixLength;
+                        newLineIndex = 1999 - indexStartSubtractor;
                     }
-
-                    outputLines.Add(CodeBlockPrefix + new string(input.Take(newLineIndex).ToArray()) + CodeBlockSuffix);
+                    if (codeBlock)
+                    {
+                        outputLines.Add(CodeBlockPrefix + new string(input.Take(newLineIndex).ToArray()) + CodeBlockSuffix);
+                    }
+                    else
+                    {
+                        outputLines.Add(new string(input.Take(newLineIndex).ToArray()));
+                    }
                     input = new string(input.Skip(newLineIndex).ToArray());
                 } while (input.Length >= 2000);
-                outputLines.Add(CodeBlockPrefix + input + CodeBlockSuffix);
+                if (codeBlock)
+                {
+                    outputLines.Add(CodeBlockPrefix + input + CodeBlockSuffix);
+                }
+                else
+                {
+                    outputLines.Add(input);
+                }
                 return outputLines.ToArray();
 
             }

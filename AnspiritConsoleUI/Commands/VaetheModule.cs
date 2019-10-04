@@ -44,7 +44,7 @@ namespace AnspiritConsoleUI.Commands
 
             if (!string.IsNullOrWhiteSpace(lines))
             {
-                var outputMessages = DiscordMessageUtilities.GetSendableCodeblockMessages(lines);
+                var outputMessages = DiscordMessageUtilities.GetSendableMessages(lines, codeBlock: true);
                 foreach (var message in outputMessages)
                 {
                     await ReplyAsync(message);

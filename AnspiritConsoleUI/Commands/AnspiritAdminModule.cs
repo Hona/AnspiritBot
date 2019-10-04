@@ -150,5 +150,38 @@ namespace AnspiritConsoleUI.Commands
                 await ReplyAsync(embed: secondEmbedBuilder.Build());
             }
         }
+        [Command("officernotescategory add")]
+        [Summary("Adds a cateogry the the officers notes categories")]
+        public async Task AddOfficerCategory(string categoryName)
+        {
+            await DbService.AddOfficerNotesCategory(categoryName);
+            await ReplyNewEmbed($"Added {categoryName} to the officers notes categories", Color.Green);
+        }
+        [Command("officernotescategory remove")]
+        [Alias("officernotescategory delete", "officernotescategory del", "officernotescategory rem")]
+        [Summary("Removes a category from the officer notes categories")]
+        public async Task RemoveOfficerCategory(string categoryName)
+        {
+            var categoryID = await DbService.GetOfficerNotesCategoryIDFromNameAsync(categoryName);
+            await DbService.RemoveOfficerNotesCategoriesAsync(categoryID);
+            await ReplyNewEmbed($"Removed {categoryName} from the officer notes categories.", Color.Green);
+        }
+        [Command("officernotescategory list")]
+        [Alias("officernotescategory ls", "officernotescategory get")]
+        [Summary("Returns a list of the current officer notes categories")]
+        public async Task ListOfficerNotesCategories()
+        {
+            var categories = DbService.GetOfficerNotesCategories();
+            var embedBuilder = new EmbedBuilder
+            {
+                Title = "Officer Notes Categories",
+                Timestamp = DateTime.Now,
+                Color = Color.Purple,
+            };
+
+            embedBuilder.Description = string.Join(Environment.NewLine, categories.Select(x => x.CategoryName));
+
+            await ReplyAsync(embed: embedBuilder.Build());
+        }
     }
 }
