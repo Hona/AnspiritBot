@@ -53,7 +53,7 @@ namespace AnspiritConsoleUI.Commands
             await ReplyNewEmbed($"Removed the note successfully", Color.Green);
         }
         [Command("officernotes list")]
-        [Alias("officernotes ls", "officernotes get")]
+        [Alias("officernotes ls", "officernotes get", "officernotes")]
         [Summary("Returns a list of the officer notes against a user")]
         public async Task ListOfficerNotes(IUser user)
         {
