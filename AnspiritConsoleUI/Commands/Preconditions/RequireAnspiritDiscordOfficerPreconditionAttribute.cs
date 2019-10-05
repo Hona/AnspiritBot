@@ -1,4 +1,5 @@
-﻿using AnspiritConsoleUI.Services.Database;
+﻿using AnspiritConsoleUI.Constants;
+using AnspiritConsoleUI.Services.Database;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
@@ -15,7 +16,7 @@ namespace AnspiritConsoleUI.Commands.Preconditions
             if (context.User is SocketGuildUser user)
             {
                 // If this command was executed by a user with a role containing 'officer', return a success
-                if (user.Roles.Any(x => x.Name.ToLower().Contains("commander")))
+                if (user.Roles.Any(x => x.Name.ToLower().Contains(DiscordConstants.OfficerNotesRoleSearcher)))
                 {
                     return Task.FromResult(PreconditionResult.FromSuccess());
                 }
