@@ -223,13 +223,18 @@ namespace AnspiritConsoleUI.Services.Database
 
             return discordID.HasValue ? db.OfficerNotes.Where(x => x.DiscordId == discordID.Value) : db.OfficerNotes;
         }
-        public async Task RemoveOfficerNotesAsync(ulong discordId, string categoryName, DateTime dateTime)
+        public async Task RemoveOfficerNotesAsync(ulong discordId, string categoryName, DateTime dateTime, string content = null)
         {
             var db = new AnspiritContext();
 
             var categoryId = await GetOfficerNotesCategoryIDFromNameAsync(categoryName);
             var notes = db.OfficerNotes.Where(x => x.DiscordId == discordId && x.CategoryID == categoryId && 
                 x.DateTimeEntry.Year == dateTime.Year && x.DateTimeEntry.Month == dateTime.Month && x.DateTimeEntry.Day == dateTime.Day);
+
+            if (content != null)
+            {
+                notes = notes.Where(x => x.Comments == content);
+            }
 
             if (notes.Count() == 1)
             {

@@ -24,9 +24,14 @@ namespace AnspiritConsoleUI.Utilities
                 throw new Exception("The user is not part of a guild - are you running this inside the server?");
             }
         }
-        public static async Task<IEnumerable<Embed>> GetOfficerNotesEmbedsAsync(IUser user, AnspiritDatabaseService dbService)
+        public static async Task<IEnumerable<Embed>> GetOfficerNotesEmbedsAsync(IUser user, AnspiritDatabaseService dbService, string category = null)
         {
             var notes = dbService.GetOfficerNotes(user.Id);
+            if (category != null)
+            {
+                var categoryID = await dbService.GetOfficerNotesCategoryIDFromNameAsync(category);
+                notes = notes.Where(x => x.CategoryID == categoryID);
+            }
             var membersRole = GetUserGuildRole(user);
             var embedColor = membersRole == null ? Color.Green : membersRole.Color;
 

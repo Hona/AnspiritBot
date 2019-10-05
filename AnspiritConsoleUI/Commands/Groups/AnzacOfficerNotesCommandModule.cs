@@ -18,7 +18,7 @@ namespace AnspiritConsoleUI.Commands
     [RequireOwner(Group = "DiscordOfficerDebug")]
     [Group("officernotes")]
     [Alias("on")]
-    public class AnzacOfficerNotesModule : AnspiritModuleBase
+    public class AnzacOfficerNotesCommandModule : AnspiritModuleBase
     {
         public AnspiritDatabaseService DbService { get; set; }
         [Command("add")]
@@ -38,7 +38,7 @@ namespace AnspiritConsoleUI.Commands
         [Command("remove")]
         [Alias("delete", "del", "rem")]
         [Summary("Removes an officer note")]
-        public async Task RemoveOfficerNote(IUser discordUser, string categoryName, [Summary("dd/mm/yyyy")] string dateTime)
+        public async Task RemoveOfficerNote(IUser discordUser, string categoryName, [Summary("dd/mm/yyyy")] string dateTime, [Remainder] string comment = null)
         {
             if (DiscordUtilities.UserIsInCallingOfficersGuild(Context.User as SocketGuildUser, discordUser as SocketGuildUser))
             {
@@ -61,7 +61,7 @@ namespace AnspiritConsoleUI.Commands
                     throw new Exception("Could not parse the year from the datetime string, are you using dd/mm/yyyy format?");
                 }
 
-                await DbService.RemoveOfficerNotesAsync(discordUser.Id, categoryName, new DateTime(year, month, day));
+                await DbService.RemoveOfficerNotesAsync(discordUser.Id, categoryName, new DateTime(year, month, day), comment);
                 await ReplyNewEmbed($"Removed the note successfully", Color.Green);
             }
             else
