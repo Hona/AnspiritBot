@@ -15,7 +15,7 @@ namespace AnspiritConsoleUI.Commands.Preconditions
             if (context.User is SocketGuildUser user)
             {
                 // If this command was executed by a user with a role containing 'officer', return a success
-                if (user.Roles.Any(x => x.Name.ToLower().Contains("officer")))
+                if (user.Roles.Any(x => x.Name.ToLower().Contains("commander")))
                 {
                     return Task.FromResult(PreconditionResult.FromSuccess());
                 }
