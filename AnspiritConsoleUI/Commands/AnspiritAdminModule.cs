@@ -14,56 +14,6 @@ namespace AnspiritConsoleUI.Commands
     {
         public AnspiritDatabaseService DbService { get; set; }
 
-        [Command("warofficer add")]
-        [Summary("Adds a discord user the the war officers, they can now run all the order related commands")]
-        public async Task AddWarOfficer(IUser discordUser)
-        {
-            await DbService.AddWarOfficerAsync(discordUser.Id);
-            await ReplyNewEmbed($"Added {discordUser.Username} to the war officers", Color.Green);   
-        }
-        [Command("warofficer remove")]
-        [Alias("warofficer delete", "warofficer del", "warofficer rem")]
-        [Summary("Removes a user from the war officer list")]
-        public async Task RemoveWarOfficer(IUser discordUser)
-        {
-            await DbService.RemoveWarOfficerAsync(discordUser.Id);
-            await ReplyNewEmbed($"Removed {discordUser.Username} from the war officers", Color.Green);
-        }
-        [Command("warofficer list")]
-        [Alias("warofficer ls", "warofficer get")]
-        [Summary("Returns a list of the current war officers, if the user has left the guild, it will show the users ID for easy removal")]
-        public async Task ListWarOfficer()
-        {
-            var officers = DbService.GetWarOfficers();
-            var embedBuilder = new EmbedBuilder
-            {
-                Title = "Anzac Spirit War Officers",
-                Timestamp = DateTime.Now,
-                Color = Color.Purple,
-            };
-
-
-            StringBuilder officerLinesBuilder = new StringBuilder();
-            foreach (var officer in officers)
-            {
-                
-                var user = Context.Guild.Users.FirstOrDefault(x => x.Id == officer.DiscordId);
-                if (user == null)
-                {
-                    officerLinesBuilder.Append($"User with id {officer.DiscordId} not found in the guild, but is registerd as a war officer");
-                }
-                else
-                {
-                    officerLinesBuilder.Append(user.Nickname ?? user.Username);
-                }
-
-                officerLinesBuilder.Append(Environment.NewLine);
-            }
-
-            embedBuilder.Description = officerLinesBuilder.ToString();
-
-            await ReplyAsync(embed: embedBuilder.Build());
-        }
 
         [Command("playerlink add")]
         [Summary("Adds a link between a users discord and in-game name, this is required for the !sendorders command. This should be done when a player joins the guild")]
