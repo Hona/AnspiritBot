@@ -15,7 +15,7 @@ namespace AnspiritConsoleUI.Utilities
             var embedBuilder = new EmbedBuilder().WithTitle(title).WithColor(Color.Purple);
             foreach (var command in validForCurrentUserCommands)
             {
-                embedBuilder.AddField($"**{'!' + command.Name}** " + GetParametersString(command).TrimEnd(' ', ','), $"{(command.Summary == string.Empty ? "No description" : command.Summary)}. ");
+                embedBuilder.AddField($"**{'!' + (string.IsNullOrEmpty(module.Group) ? "" : module.Group + " ") +command.Name}** " + GetParametersString(command).TrimEnd(' ', ','), $"{(command.Summary == string.Empty ? "No description" : command.Summary)}. ");
             }
 
             return embedBuilder.Build();
