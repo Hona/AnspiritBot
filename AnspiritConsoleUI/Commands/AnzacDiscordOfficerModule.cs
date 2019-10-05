@@ -57,7 +57,7 @@ namespace AnspiritConsoleUI.Commands
         [Summary("Returns a list of the officer notes against a user")]
         public async Task ListOfficerNotes(IUser user)
         {
-            var notes = DbService.GetOfficerNotes(user);
+            var notes = DbService.GetOfficerNotes(user.Id);
 
             var membersRole = (user as SocketGuildUser).Roles.FirstOrDefault(x => x.Name.ToLower().Contains("member") && x.Id != DiscordConstants.CoalitionMembersRoleID);
 
