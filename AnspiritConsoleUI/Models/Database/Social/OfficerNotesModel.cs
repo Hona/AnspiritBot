@@ -14,7 +14,7 @@ namespace AnspiritConsoleUI.Models.Database.Social
         public ulong DiscordId { get; set; }
         [Column("datetimeEntry", TypeName = "DATETIME NOT NULL")]
         public DateTime DateTimeEntry { get; set; }
-        [Column("comments", TypeName = "VARCHAR(128) NOT NULL")]
+        [Column("comments", TypeName = "VARCHAR(1024) NOT NULL")]
         public string Comments { get; set; }
     }
 }

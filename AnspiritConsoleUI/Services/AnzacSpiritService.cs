@@ -126,5 +126,9 @@ namespace AnspiritConsoleUI.Services
 
             return embedBuilder.Build();
         }
+        public IEnumerable<Embed> GetOfficerNotesEmbeds()
+        {
+            return null;
+        }
     }
 }

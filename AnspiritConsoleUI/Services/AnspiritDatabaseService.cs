@@ -200,9 +200,9 @@ namespace AnspiritConsoleUI.Services.Database
         #region OfficerNotes
         public async Task AddOfficerNote(string categoryName, ulong discordId, string comment)
         {
-            if (comment.Length > 128)
+            if (comment.Length > 1024)
             {
-                throw new ArgumentOutOfRangeException(nameof(comment), "Comment must be 128 or less characters.");
+                throw new ArgumentOutOfRangeException(nameof(comment), "Comment must be 1024 or less characters.");
             }
 
             var categoryId = await GetOfficerNotesCategoryIDFromNameAsync(categoryName);

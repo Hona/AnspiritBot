@@ -16,10 +16,12 @@ namespace AnspiritConsoleUI.Commands
 {
     [RequireAnspiritDiscordOfficerPrecondition(Group = "DiscordOfficerDebug")]
     [RequireOwner(Group = "DiscordOfficerDebug")]
-    public class AnzacDiscordOfficerModule : AnspiritModuleBase
+    [Group("officernotes")]
+    [Alias("on")]
+    public class AnzacOfficerNotesModule : AnspiritModuleBase
     {
         public AnspiritDatabaseService DbService { get; set; }
-        [Command("officernotes add")]
+        [Command("add")]
         [Summary("Adds an officers notes categories")]
         public async Task AddOfficerNote(IUser discordUser, string categoryName, [Remainder] string notes)
         {
@@ -33,8 +35,8 @@ namespace AnspiritConsoleUI.Commands
                 await ReplyNewEmbed("You cannot access members in other guilds.", Color.Red);
             }
         }
-        [Command("officernotes remove")]
-        [Alias("officernotes delete", "officernotes del", "officernotes rem")]
+        [Command("remove")]
+        [Alias("delete", "del", "rem")]
         [Summary("Removes an officer note")]
         public async Task RemoveOfficerNote(IUser discordUser, string categoryName, [Summary("dd/mm/yyyy")] string dateTime)
         {
@@ -67,50 +69,13 @@ namespace AnspiritConsoleUI.Commands
                 await ReplyNewEmbed("You cannot access members in other guilds.", Color.Red);
             }
         }
-        [Command("officernotes list")]
-        [Alias("officernotes ls", "officernotes get", "officernotes")]
+        [Command("list")]
+        [Alias("ls", "get", "")]
         [Summary("Returns a list of the officer notes against a user")]
         public async Task ListOfficerNotes(IUser user)
         {
-            var notes = DbService.GetOfficerNotes(user.Id);
-
-            var membersRole = (user as SocketGuildUser).Roles.FirstOrDefault(x => x.Name.ToLower().Contains("member") && x.Id != DiscordConstants.CoalitionMembersRoleID);
-
-            var embedColor = membersRole == null ? Color.Green : membersRole.Color;
-
-            var stringBuilder = new StringBuilder();
-
-            foreach (var note in notes)
-            {
-                var formattedDate = note.DateTimeEntry.ToString("dd/MM/yyyy");
-                string categoryName;
-                try
-                {
-                    categoryName = await DbService.GetOfficerNotesCategoryNameFromIDAsync(note.CategoryID);
-                }
-                catch
-                {
-                    categoryName = "<Not Found>";
-                }
-
-                stringBuilder.Append($"{formattedDate} | {categoryName} | {note.Comments}");
-                stringBuilder.Append(Environment.NewLine);
-            }
-            
-            var embedDescriptions = DiscordMessageUtilities.GetSendableMessages(stringBuilder.ToString());
-
-            for (int i = 0; i < embedDescriptions.Length; i++)
-            {
-                var embedBuilder = new EmbedBuilder
-                {
-                    Title = i == 0 ? $"Officer Notes for {user.Username}" : null,
-                    Timestamp = DateTime.Now,
-                    Color = embedColor,
-                    Description = embedDescriptions[i]
-                };
-
-                await ReplyAsync(embed: embedBuilder.Build());
-            }
+            var outputEmbeds = await AnspiritUtilities.GetOfficerNotesEmbedsAsync(user, DbService);
+            await outputEmbeds.SendAllAsync(Context.Channel);
         }
     }
 }
