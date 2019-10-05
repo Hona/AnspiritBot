@@ -18,5 +18,6 @@ namespace AnspiritConsoleUI.Constants
         internal static readonly char DiscordCommandPrefix = '!';
         internal const int LogPaddingLength = 10;
         internal const ulong VaetheDiscordID = 316378932100333568;
+        internal const ulong CoalitionMembersRoleID = 479193743795421186;
     }
 }

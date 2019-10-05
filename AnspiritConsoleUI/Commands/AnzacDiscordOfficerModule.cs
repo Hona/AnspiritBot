@@ -1,4 +1,5 @@
 ﻿using AnspiritConsoleUI.Commands.Preconditions;
+using AnspiritConsoleUI.Constants;
 using AnspiritConsoleUI.Services;
 using AnspiritConsoleUI.Services.Database;
 using Discord;
@@ -29,6 +30,7 @@ namespace AnspiritConsoleUI.Commands
         [Summary("Removes an officer note")]
         public async Task RemoveOfficerNote(IUser discordUser, string categoryName, [Summary("dd/mm/yyyy")] string dateTime)
         {
+            // TODO: This could be parsed simply by DateTime.Parse
             var datetimeParts = dateTime.Split('/');
             var dayString = datetimeParts[0];
             var monthString = datetimeParts[1];
@@ -55,9 +57,9 @@ namespace AnspiritConsoleUI.Commands
         [Summary("Returns a list of the officer notes against a user")]
         public async Task ListOfficerNotes(IUser user)
         {
-            var notes = DbService.GetOfficerNotes();
+            var notes = DbService.GetOfficerNotes(user);
 
-            var membersRole = (user as SocketGuildUser).Roles.FirstOrDefault(x => x.Name.ToLower().Contains("member"));
+            var membersRole = (user as SocketGuildUser).Roles.FirstOrDefault(x => x.Name.ToLower().Contains("member") && x.Id != DiscordConstants.CoalitionMembersRoleID);
 
             var embedColor = membersRole == null ? Color.Green : membersRole.Color;
 
