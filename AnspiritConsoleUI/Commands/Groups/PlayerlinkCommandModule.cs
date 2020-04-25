@@ -48,7 +48,7 @@ namespace AnspiritConsoleUI.Commands.Groups
             foreach (var userLink in userLinks)
             {
 
-                var user = Context.Guild.Users.FirstOrDefault(x => x.Id == userLink.DiscordId);
+                var user = Context.Guild?.Users.FirstOrDefault(x => x.Id == userLink.DiscordId);
                 if (user == null)
                 {
                     userLinkLinesBuilder.Append($"{userLink.InGameName} | User not found, id: {userLink.DiscordId}");
