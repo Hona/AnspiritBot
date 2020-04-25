@@ -1,6 +1,5 @@
 ﻿using AnspiritConsoleUI.Data;
 using AnspiritConsoleUI.Services;
-using AnspiritConsoleUI.Services.Database;
 using AnspiritConsoleUI.Services.Google;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -21,7 +20,6 @@ namespace AnspiritConsoleUI.Discord
         public IServiceProvider BuildServiceProvider()
         {
             var logger = new LogService(_discordClient);
-            var dbContext = new AnspiritContext();
             var dbService = new AnspiritDatabaseService(logger);
             return new ServiceCollection()
                 .AddSingleton(_discordClient)
@@ -29,7 +27,6 @@ namespace AnspiritConsoleUI.Discord
                 .AddSingleton(logger)
                 .AddSingleton<AnspiritSheetsService>()
                 .AddSingleton<AnzacSpiritService>()
-                .AddSingleton(dbContext)
                 .AddSingleton(dbService)
                 .BuildServiceProvider();
         }
