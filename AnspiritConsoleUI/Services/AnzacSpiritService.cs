@@ -78,20 +78,31 @@ namespace AnspiritConsoleUI.Services
         {
             var orders = GetWarOrdersSortedByZone(GetWarZones());
 
-            var allPlayers = orders.Select(x => x.Item2.Player).Distinct().ToList();
+            foreach (var order in orders)
+            {
+                order.Item2.Player = order.Item2.Player.Trim();
+            }
+
+            var allPlayers = orders.Select(x => x.Item2.Player.Trim()).Distinct().ToList();
 
             var output = new Dictionary<ulong, List<Tuple<string, Deployment>>>();
 
-            var playerDiscords = _dbService.GetInGamePlayerDiscordLinks();
+            var playerDiscords = _dbService.GetInGamePlayerDiscordLinks().ToList();
+            foreach (var player in playerDiscords)
+            {
+                player.InGameName = player.InGameName.Trim();
+            }
+
             foreach (var player in allPlayers)
             {
                 // Should always be >= 1
                 var deploymentOrders = orders.Where(x => x.Item2.Player == player).ToList();
-                var playerLink = playerDiscords.FirstOrDefault(x => x.InGameName.ToLower() == player.ToLower());
+                var playerLink = playerDiscords.FirstOrDefault(x => string.Equals(x.InGameName, player, StringComparison.CurrentCultureIgnoreCase));
                 if (playerLink == null)
                 {
                     throw new Exception("Could not find a player link for ingame name of " + player);
                 }
+
                 var discordId = playerLink.DiscordId;
 
                 if (output.ContainsKey(discordId))
