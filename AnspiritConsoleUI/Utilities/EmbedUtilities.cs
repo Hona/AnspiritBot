@@ -1,6 +1,6 @@
 ﻿using Discord;
 
-namespace AnspiritConsoleUI.Services
+namespace AnspiritConsoleUI.Utilities
 {
     public static class EmbedUtilities
     {

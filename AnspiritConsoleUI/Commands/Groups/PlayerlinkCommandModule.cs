@@ -1,13 +1,13 @@
-﻿using AnspiritConsoleUI.Commands.Preconditions;
-using AnspiritConsoleUI.Services.Database;
-using Discord;
-using Discord.Commands;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AnspiritConsoleUI.Commands.Preconditions;
+using AnspiritConsoleUI.Services;
+using Discord;
+using Discord.Commands;
 
-namespace AnspiritConsoleUI.Commands
+namespace AnspiritConsoleUI.Commands.Groups
 {
     [RequireAnspiritAdminPrecondition]
     [Group("playerlink")]

@@ -1,9 +1,10 @@
-﻿using AnspiritConsoleUI.Services.Database;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Discord.WebSocket;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AnspiritConsoleUI.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AnspiritConsoleUI.Commands.Preconditions
 {
@@ -14,7 +15,7 @@ namespace AnspiritConsoleUI.Commands.Preconditions
             // Check if this user is a Guild User, which is the only context where roles exist
             if (context.User is SocketUser user)
             {
-                var dbService = services.GetService(typeof(AnspiritDatabaseService)) as AnspiritDatabaseService;
+                var dbService = services.GetRequiredService<AnspiritDatabaseService>();
 
                 // If this command was executed by a user with the appropriate role, return a success
                 if (dbService.GetAnspiritAdmins().Any(x => x.DiscordId == user.Id))

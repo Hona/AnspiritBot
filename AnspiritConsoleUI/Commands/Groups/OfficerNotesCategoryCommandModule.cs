@@ -1,14 +1,13 @@
-﻿using AnspiritConsoleUI.Commands.Preconditions;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using AnspiritConsoleUI.Commands.Preconditions;
 using AnspiritConsoleUI.Constants;
-using AnspiritConsoleUI.Services.Database;
+using AnspiritConsoleUI.Services;
 using Discord;
 using Discord.Commands;
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AnspiritConsoleUI.Commands
+namespace AnspiritConsoleUI.Commands.Groups
 {
     [RequireAnspiritAdminPrecondition]
     [Group("officernotescategory")]

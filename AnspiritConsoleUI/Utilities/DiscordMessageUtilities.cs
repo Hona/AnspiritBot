@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AnspiritConsoleUI.Services
+namespace AnspiritConsoleUI.Utilities
 {
     public static class DiscordMessageUtilities
     {

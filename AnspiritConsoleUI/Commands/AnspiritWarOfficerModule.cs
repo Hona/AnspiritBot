@@ -6,7 +6,6 @@ using AnspiritConsoleUI.Models;
 using System.Collections.Generic;
 using System;
 using Discord;
-using AnspiritConsoleUI.Services.Database;
 using AnspiritConsoleUI.Utilities;
 using AnspiritConsoleUI.Commands.Preconditions;
 

@@ -1,6 +1,5 @@
 ﻿using AnspiritConsoleUI.Constants;
 using AnspiritConsoleUI.Services;
-using AnspiritConsoleUI.Services.Database;
 using Discord;
 using Discord.WebSocket;
 using System;

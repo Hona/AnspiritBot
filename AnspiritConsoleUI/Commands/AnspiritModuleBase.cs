@@ -2,6 +2,7 @@
 using Discord;
 using Discord.Commands;
 using System.Threading.Tasks;
+using AnspiritConsoleUI.Utilities;
 
 namespace AnspiritConsoleUI.Commands
 {

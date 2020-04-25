@@ -5,6 +5,7 @@ using Discord.Commands;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using AnspiritConsoleUI.Utilities;
 
 namespace AnspiritConsoleUI.Commands
 {

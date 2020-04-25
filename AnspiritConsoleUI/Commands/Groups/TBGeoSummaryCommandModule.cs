@@ -1,18 +1,13 @@
-﻿using AnspiritConsoleUI.Commands.Preconditions;
+﻿using System;
+using System.Threading.Tasks;
+using AnspiritConsoleUI.Commands.Preconditions;
 using AnspiritConsoleUI.Constants;
 using AnspiritConsoleUI.Services;
-using AnspiritConsoleUI.Services.Database;
 using AnspiritConsoleUI.Utilities;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AnspiritConsoleUI.Commands
+namespace AnspiritConsoleUI.Commands.Groups
 {
     [RequireAnspiritDiscordOfficerPrecondition(Group = "TBGeoSummaryDebug")]
     [RequireOwner(Group = "TBGeoSummaryDebug")]

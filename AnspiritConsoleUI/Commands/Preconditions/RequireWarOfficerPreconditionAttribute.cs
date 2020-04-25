@@ -1,9 +1,9 @@
-﻿using AnspiritConsoleUI.Services.Database;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Discord.WebSocket;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AnspiritConsoleUI.Services;
 
 namespace AnspiritConsoleUI.Commands.Preconditions
 {

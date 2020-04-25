@@ -1,12 +1,12 @@
-﻿using AnspiritConsoleUI.Data;
-using AnspiritConsoleUI.Models.Database;
-using AnspiritConsoleUI.Models.Database.Social;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AnspiritConsoleUI.Data;
+using AnspiritConsoleUI.Models.Database;
+using AnspiritConsoleUI.Models.Database.Social;
 
-namespace AnspiritConsoleUI.Services.Database
+namespace AnspiritConsoleUI.Services
 {
     public class AnspiritDatabaseService
     {
@@ -65,7 +65,6 @@ namespace AnspiritConsoleUI.Services.Database
         {
             var db = new AnspiritContext();
             return db.WarOfficers;
-
         }
         public async Task RemoveWarOfficerAsync(ulong discordId)
         {

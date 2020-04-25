@@ -1,7 +1,6 @@
 ﻿using AnspiritConsoleUI.Constants;
 using AnspiritConsoleUI.Models.Database;
 using AnspiritConsoleUI.Services;
-using AnspiritConsoleUI.Services.Database;
 using Discord.Commands;
 using System;
 using System.IO;
