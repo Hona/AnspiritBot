@@ -26,12 +26,17 @@ namespace AnspiritConsoleUI.Commands
             var finalOrders = AnzacSpiritService.GetWarOrdersSortedByDiscordUser();
 
             // DM to each user
-            Parallel.ForEach(finalOrders, async (KeyValuePair<ulong, List<Tuple<string, Deployment>>> playerOrder) => 
+            foreach (var finalOrder in finalOrders)
             {
-                var user = Context.Guild.Users.First(x => x.Id == playerOrder.Key);
-                var embed = AnzacSpiritService.GetPlayerOrdersEmbed(playerOrder);
+                var user = Context.Guild.Users.FirstOrDefault(x => x.Id == finalOrder.Key);
+                if (user == null)
+                {
+                    await ReplyNewEmbed($"No user found for {finalOrder.Value[0].Item2.Player}", Color.Red);
+                    return;
+                }
+                var embed = AnzacSpiritService.GetPlayerOrdersEmbed(finalOrder);
                 await DiscordUtilities.DirectMessageUserAsync(embed, user);
-            });
+            }
 
             await ReplyNewEmbed("Success", Color.Purple);
         }
