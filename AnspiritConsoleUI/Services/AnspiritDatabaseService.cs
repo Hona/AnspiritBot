@@ -86,9 +86,8 @@ namespace AnspiritConsoleUI.Services
         {
             var db = new AnspiritContext();
 
-
             await _logger.LogInfoAsync("AnspiritDB", $"Adding {inGameName} ({discordId}) to the in game discord link table");
-            var existingUser = db.IngamePlayerDiscordLinks.FirstOrDefault(x => x.DiscordId == discordId);
+            var existingUser = db.IngamePlayerDiscordLinks.FirstOrDefault(x => x.InGameName == inGameName);
             if (existingUser == null)
             {
                 db.IngamePlayerDiscordLinks.Add(new IngamePlayerDiscordLinkModel
@@ -100,6 +99,7 @@ namespace AnspiritConsoleUI.Services
             else
             {
                 await RemoveIngamePlayerDiscordLinkAsync(inGameName);
+                await db.SaveChangesAsync();
                 await AddIngamePlayerDiscordLinkAsync(discordId, inGameName);
             }
 
@@ -110,7 +110,6 @@ namespace AnspiritConsoleUI.Services
         {
             var db = new AnspiritContext();
             return db.IngamePlayerDiscordLinks;
-
         }
         public async Task RemoveIngamePlayerDiscordLinkAsync(string playerName)
         {
@@ -124,7 +123,6 @@ namespace AnspiritConsoleUI.Services
                 db.IngamePlayerDiscordLinks.Remove(player);
                 await db.SaveChangesAsync();
             }
-
         }
         #endregion
         #region OfficerNotesCategories
@@ -238,7 +236,7 @@ namespace AnspiritConsoleUI.Services
             if (notes.Count() == 1)
             {
                 db.OfficerNotes.Remove(notes.First());
-                db.SaveChangesAsync();
+                await db.SaveChangesAsync();
             }
             else
             {
